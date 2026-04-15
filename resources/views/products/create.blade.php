@@ -152,7 +152,7 @@
                             <label class="form-label">Foto Produk</label>
                             <input type="file" name="image" id="image-input" class="form-control" accept="image/*">
                             <div class="mt-3 text-center">
-                                <img id="image-preview" src="#" alt="Preview Gambar">
+                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
                             </div>
                         </div>
 

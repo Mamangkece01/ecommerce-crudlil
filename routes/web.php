@@ -21,15 +21,15 @@ Route::get('/products/{product}', [ProductController::class, 'show'])->name('pro
 
 // 2. HALAMAN KHUSUS LOGIN (User & Admin)
 Route::middleware(['auth', 'verified'])->group(function () {
-    
+
     // DASHBOARD REDIRECTOR (Pintu Otomatis)
     Route::get('/dashboard', function () {
         if (Auth::user()->role === 'admin') {
             // Ambil data pesanan terbaru untuk admin
             $recentOrders = \App\Models\Order::with('user')->latest()->take(5)->get();
-            return view('admin.dashboard', compact('recentOrders')); 
+            return view('admin.dashboard', compact('recentOrders'));
         }
-        return view('dashboard'); 
+        return view('dashboard');
     })->name('dashboard');
 
     // Profile
@@ -42,6 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/add-to-cart/{id}', [CartController::class, 'add'])->name('cart.add');
     Route::patch('/update-cart', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/remove-from-cart', [CartController::class, 'remove'])->name('cart.remove');
+    Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 
@@ -49,7 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', function () {
             if (Auth::user()->role !== 'admin') return redirect('/dashboard');
-            
+
             // Sama seperti di atas, ambil data pesanan buat dashboard admin
             $recentOrders = \App\Models\Order::with('user')->latest()->take(5)->get();
             return view('admin.dashboard', compact('recentOrders'));
